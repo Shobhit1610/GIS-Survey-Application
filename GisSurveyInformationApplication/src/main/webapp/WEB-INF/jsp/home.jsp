@@ -11,7 +11,7 @@
 			<h1>HOME PAGE</h1>
 		</div>		
 		<div>
-			<div>
+			 <div>
 				<form:form action="${pageContext.request.contextPath}/user" method="get">
 					<button type="submit">Login as USER</button>
 				</form:form>
@@ -21,8 +21,6 @@
 					<button type="submit">Login as ADMIN</button>
 				</form:form>
 			</div>
-			<div>
 			</div>
-		</div>
 	</body>
 </html>

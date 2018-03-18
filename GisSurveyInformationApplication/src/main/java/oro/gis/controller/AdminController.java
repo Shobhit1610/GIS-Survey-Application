@@ -1,6 +1,7 @@
 package oro.gis.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,11 +27,16 @@ public class AdminController
 	}
 	
 	@RequestMapping(value="", method=RequestMethod.POST)
-	public ModelAndView index(@ModelAttribute("adminDetails") AdminDetailsBean adminDetailsBean, HttpServletRequest request)
+	public ModelAndView index(@ModelAttribute("adminDetails") AdminDetailsBean adminDetailsBean, HttpServletRequest request,HttpSession session)
 	{
 		ModelAndView indexView = new ModelAndView();
-		if(adminDetailsBean.verify())
+		if((Boolean)session.getAttribute("logged")!=null)
 		{
+			indexView.setViewName("adminSide/adminPanel");
+		}
+		else if(adminDetailsBean.verify())
+		{
+			session.setAttribute("logged", true);
 			indexView.setViewName("adminSide/adminPanel");
 		}
 		else
@@ -39,6 +45,6 @@ public class AdminController
 			indexView.setViewName("adminSide/adminLogin");
 		}
 		return indexView;
+		
 	}
-
 }
