@@ -28,7 +28,7 @@
                         <div class="panel-heading ">
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <div class="huge">26</div>
+                                    <div class="huge">${users_count}</div>
                                     <div>Users registered</div>
                                 </div>
                             </div>
@@ -43,7 +43,7 @@
                         <div class="panel-heading">
                             <div class="row">
                                 <div class="col-xs-12 text-center">
-                                    <div class="huge">12</div>
+                                    <div class="huge">${tables_count}</div>
                                     <div>Tables made</div>
                                 </div>
                             </div>
