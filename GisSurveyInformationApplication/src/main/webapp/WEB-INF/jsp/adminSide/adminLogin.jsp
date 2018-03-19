@@ -1,33 +1,39 @@
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@include file="/WEB-INF/html/head/directives.html" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-	<head>
+<head>
 		<title>Admin Login</title>
-	</head>
-	<body>
-		<div>
-			<h1>Admin Login</h1>
-		</div>
-		<div>
-			<form:form action="${pageContext.request.contextPath}/admin" method="post" commandName="adminDetails">
-				<fieldset>
-					<legend>Sign in here</legend>
-					<form:label path="adminUsername">
-					USERNAME
-					<form:input path="adminUsername" type="text"/>
-					</form:label>
-					<form:label path="adminPassword">
-					PASSWORD
-					<form:input path="adminPassword" type="password"/>
-					</form:label>
-					<button type="submit">Proceed</button>
-				</fieldset>
-			</form:form>			
-		</div>
-		<div>
-			<h1>${error}</h1>
-		</div>
-	</body>
+		<%@include file="/WEB-INF/html/head/csslinks.html" %>
+</head>
+<body>
+	<div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Sign In</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form:form action="${pageContext.request.contextPath}/admin" method="post" commandName="adminDetails" role="form">
+                            <fieldset>
+                                <div class="form-group">
+                                    <form:input cssClass="form-control" placeholder="Username" name="email" type="text" autofocus="autofocus" path="adminUsername"/>
+                                </div>
+                                <div class="form-group">
+                                    <form:input cssClass="form-control" placeholder="Password" name="password" type="password" autofocus="autofocus" path="adminPassword"/>
+                                </div>
+                                <div>
+                    				<h4>${error}</h4>
+                    			</div>
+                                <button type="submit" class="btn btn-lg btn-success btn-block">Login</button>
+                            </fieldset>
+                        </form:form>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+	<%@include file="/WEB-INF/html/body/jsscripts.html" %>
+</body>
 </html>

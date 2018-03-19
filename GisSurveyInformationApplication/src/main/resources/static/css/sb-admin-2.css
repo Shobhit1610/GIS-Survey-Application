@@ -22,7 +22,6 @@ body {
     border-left: 1px solid #e7e7e7;
   }
 }
-
 .navbar-top-links {
   margin-right: 0;
 }
@@ -117,7 +116,6 @@ body {
   color: inherit;
   background-color: transparent;
   transition: all .5s;
-  border-radius :0 px;
 }
 .btn-primary.btn-outline {
   color: #428bca;
@@ -160,7 +158,6 @@ body {
 .chat li .chat-body p {
   margin: 0;
 }
-
 .panel .slidedown .glyphicon,
 .chat .glyphicon {
   margin-right: 5px;
@@ -240,19 +237,13 @@ table.dataTable thead .sorting:after {
 .huge {
   font-size: 40px;
 }
-.panel-white >.panel-heading
-{
-	border-color: #d9534f;
-  	color: #d9534f;
-  	background-color: white;
-}
 .panel-green {
   border-color: #5cb85c;
 }
 .panel-green > .panel-heading {
   border-color: #5cb85c;
-  color: #5cb85c;
-  background-color: white;
+  color: white;
+  background-color: #5cb85c;
 }
 .panel-green > a {
   color: #5cb85c;

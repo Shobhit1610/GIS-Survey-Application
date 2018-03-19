@@ -1,8 +1,3 @@
-			function dashboard()
-			{
-				document.navform.action="admin";
-        		submitMyForm();
-			}
 			function adduser()
         	{
 				document.navform.action="admin/user/addUser";

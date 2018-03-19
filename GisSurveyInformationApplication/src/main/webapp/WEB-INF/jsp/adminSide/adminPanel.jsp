@@ -1,17 +1,12 @@
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%@ taglib prefix="stl"      uri="http://java.sun.com/jsp/jstl/core"%>
+<%@include file="/WEB-INF/html/head/directives.html" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-
-<html lang="en">
-
+<html>
 <head>
-	<%@include file="/WEB-INF/html/head/csslinks.html" %>
+		<title>Admin Panel</title>
+		<%@include file="/WEB-INF/html/head/csslinks.html" %>
 </head>
-
 <body>
-	<%@include file="/WEB-INF/html/body/navigationheader.html" %>
+	<%@include file="/WEB-INF/html/body/adminnavigationheader.html" %>
 	<div id="wrapper">
 
         <div id="page-wrapper">
@@ -34,7 +29,7 @@
                             </div>
                         </div>
                             <div class="panel-footer" onclick="addUser()">
-                                Click here 
+                                View Details... 
                             </div>
                        </div>
                 </div>
@@ -49,7 +44,7 @@
                             </div>
                         </div>
                            <div class="panel-footer" onclick="addTable()">
-                               Click here
+                               View Details...
                             </div>
                     	</div>
                		 </div>
@@ -78,7 +73,7 @@
                   		</form:form> 
                   	</div>	
                   	<div class="col-lg-3 text center">
-                  		<form:form action="${pageContext.request.contextPath}/admin/user/deleteUser" method="post">
+                  		<form:form action="${pageContext.request.contextPath}/admin/user/showAllUsers" method="post">
                   			<button class="btn btn-outline btn-primary btn-lg btn-block" type="submit">
                   				Show Users
                   			</button>
@@ -109,6 +104,10 @@
                   		</form:form> 
                   	</div>
                   </div>
+                	<div class="footer navbar-fixed-bottom">
+                  			<h3>${confirmation}</h3>
+                	</div>
+                  	
                   
             </div>
     </div>        
@@ -134,7 +133,7 @@
     		table.style.display = "block";
     	}
     </script>
- <%@include file="/WEB-INF/html/body/jsscripts.html" %> 
- </body>
+   	<%@include file="/WEB-INF/html/body/jsscripts.html" %>
+</body>
 
 </html>
