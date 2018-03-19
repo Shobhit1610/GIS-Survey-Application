@@ -55,7 +55,7 @@ public class AdminModifyUserController
 			placeholders.put("link","addUser");
 			placeholders.put("process","Add");
 			addUserView.addAllObjects(placeholders);
-			addUserView.setViewName("adminSide/createOrDeleteUser/askingDetails");
+			addUserView.setViewName("adminSide/addUser");
 		}
 		return addUserView;
 	}
