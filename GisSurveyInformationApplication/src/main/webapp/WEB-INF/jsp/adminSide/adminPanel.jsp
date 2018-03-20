@@ -83,21 +83,21 @@
 
                   <div class="row" id="addtable" style="display:none;">
                   	<div class="col-lg-4 text center">
-                  		<form:form action="${pageContext.request.contextPath}/admin/user/addUser" method="post">
+                  		<form:form action="${pageContext.request.contextPath}/admin/table/addTable" method="post">
                   			<button class="btn btn-outline btn-primary btn-lg btn-block" type="submit">
                   				Add Tables
                   			</button>
                   		</form:form> 
                   	</div>
                   	<div class="col-lg-4 text center">
-                  		<form:form action="${pageContext.request.contextPath}/admin/user/editUser" method="post">
+                  		<form:form action="${pageContext.request.contextPath}/admin/table/deleteTable" method="post">
                   			<button class="btn btn-outline btn-primary btn-lg btn-block" type="submit">
                   				Delete tables
                   			</button>
                   		</form:form> 
                   	</div>
                   	<div class="col-lg-4 text center">
-                  		<form:form action="${pageContext.request.contextPath}/admin/user/editUser" method="post">
+                  		<form:form action="${pageContext.request.contextPath}/admin/table/showAllTables" method="post">
                   			<button class="btn btn-outline btn-primary btn-lg btn-block" type="submit">
                   				Show tables
                   			</button>

@@ -1,5 +1,8 @@
 package oro.gis.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import oro.gis.model.TableFieldsModel;
 import oro.gis.model.TableNameModel;
 import oro.gis.service.TableFieldsModelService;
 import oro.gis.service.TableNameModelService;
+import oro.gis.service.UserDetailsTableService;
 
 @Controller
 @RequestMapping(value="/admin/table")
@@ -27,14 +31,12 @@ public class AdminModifyTableController
 	@Autowired
 	private TableFieldsModelService tableFieldsModelService;
 	
-	@RequestMapping(value="",method=RequestMethod.POST)
-	public ModelAndView index()
-	{
-		ModelAndView indexView = new ModelAndView();
-		indexView.addObject("details",tableNameModelService.getAllTables());
-		indexView.setViewName("adminSide/createOrDeleteTable/adminclicktable");
-		return indexView;
-	}
+	@Autowired
+	private UserDetailsTableService userDetailsTableService;
+	
+	@Autowired
+	private Map<String,Object> placeholders;
+	
 	
 	@RequestMapping(value="/addTable",method=RequestMethod.POST)
 	public ModelAndView addTable(@ModelAttribute("tablenamedetails") TableNameModel tableName,@ModelAttribute("tablefieldsdetails") TableFieldsModel tableFields,HttpServletRequest request)
@@ -53,6 +55,12 @@ public class AdminModifyTableController
 			else
 			{
 				request.setAttribute("confirmation","Table and its fields added Successfully");
+				long users = userDetailsTableService.count();
+				long tables = tableNameModelService.count();
+				placeholders = new HashMap<String,Object>();
+				placeholders.put("users_count",users);
+				placeholders.put("tables_count", tables);
+				addTableView.addAllObjects(placeholders);
 				addTableView.setViewName("adminSide/adminPanel");
 			}
 		}
@@ -77,12 +85,37 @@ public class AdminModifyTableController
 	public ModelAndView deleteTable(HttpServletRequest request)
 	{
 		ModelAndView deletedTableView = new ModelAndView();
-		int id = Integer.parseInt((String)request.getParameter("option"));
+		if(request.getParameter("tableDeleted")==null)
+		{
+			deletedTableView.addObject("details",tableNameModelService.getAllTables());
+			deletedTableView.addObject("show",true);
+			deletedTableView.setViewName("adminSide/createOrDeleteTable/deleteTable");
+		}
+		else
+		{
+		int id = Integer.parseInt((String)request.getParameter("tableDeleted"));
 		tableNameModelService.delete(new TableNameModel(id));
 		tableFieldsModelService.deleteAllByDataTypeID(id);
 		request.setAttribute("confirmation","Table and its fields deleted Successfully");
+		long users = userDetailsTableService.count();
+		long tables = tableNameModelService.count();
+		placeholders = new HashMap<String,Object>();
+		placeholders.put("users_count",users);
+		placeholders.put("tables_count", tables);
+		deletedTableView.addAllObjects(placeholders);
 		deletedTableView.setViewName("adminSide/adminPanel");
+		}
 		return deletedTableView;
+	}
+	
+	@RequestMapping(value="/showAllTables" ,method=RequestMethod.POST)
+	public ModelAndView showAllTables()
+	{
+		ModelAndView showTableView = new ModelAndView();
+		showTableView.addObject("details",tableNameModelService.getAllTables());
+		showTableView.addObject("show",false);
+		showTableView.setViewName("adminSide/createOrDeleteTable/showAllTables");
+		return showTableView;
 	}
 
 }
