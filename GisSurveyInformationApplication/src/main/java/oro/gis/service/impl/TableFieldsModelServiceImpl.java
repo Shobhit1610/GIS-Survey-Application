@@ -16,6 +16,8 @@ public class TableFieldsModelServiceImpl implements TableFieldsModelCustomServic
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
+	private List<TableFieldsModel> allFields;
+	
 	public void deleteAllByDataTypeID(int dataTypeID)
 	{
 		jdbcTemplate.update("delete from data_fields where data_type_id = ?",new Object[] {Long.valueOf(dataTypeID)});
@@ -40,5 +42,11 @@ public class TableFieldsModelServiceImpl implements TableFieldsModelCustomServic
 			listOfObjects.add(tableRow);
 		}
 		return listOfObjects;
+	}
+
+	public List<TableFieldsModel> getModelObjectList() 
+	{
+		this.allFields = new ArrayList<TableFieldsModel>();
+		return this.allFields;
 	}
 }	

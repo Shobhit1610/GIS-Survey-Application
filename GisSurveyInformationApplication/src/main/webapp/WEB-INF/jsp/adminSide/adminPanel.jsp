@@ -28,8 +28,23 @@
                                 </div>
                             </div>
                         </div>
-                            <div class="panel-footer" onclick="addUser()">
-                                View Details... 
+                            <div class="panel-footer">
+                                <div class="row">
+                                	<div class="col-xs-6">
+                                		<form:form action="${pageContext.request.contextPath}/admin/user/addUser" method="post" >
+                  							<button class="btn btn-outline btn-primary btn-lg btn-block" type="submit" style="border:none;">
+                  								Add Users
+                  							</button>
+                				  		</form:form> 
+                                	</div>
+                                	<div class="col-xs-6">
+                                		<form:form action="${pageContext.request.contextPath}/admin/user/showUsers" method="post">
+                  							<button class="btn btn-no-border btn-outline btn-primary btn-lg btn-block btn-no-border"  style="border:none;" type="submit">
+                  								Show Users
+                  							</button>
+                  						</form:form>
+                                	</div>
+                                </div>
                             </div>
                        </div>
                 </div>
@@ -43,96 +58,32 @@
                                 </div>
                             </div>
                         </div>
-                           <div class="panel-footer" onclick="addTable()">
-                               View Details...
+                           <div class="panel-footer">
+                               <div class="row">
+                               		<div class="col-xs-6">
+                               			<form:form action="${pageContext.request.contextPath}/admin/table/addTable" method="post">
+                  							<button class="btn btn-outline btn-primary btn-lg btn-block" type="submit" style="border:none;">
+                  								Add Tables
+                  							</button>
+                  						</form:form>
+                               		</div>
+                               		<div class="col-xs-6">
+                               			<form:form action="${pageContext.request.contextPath}/admin/table/deleteTable" method="post">
+                  							<button class="btn btn-outline btn-primary btn-lg btn-block" type="submit" style="border:none;">
+                  								Show Tables
+                  							</button>
+                  						</form:form>
+                               		</div>
+                               </div>
                             </div>
                     	</div>
                		 </div>
                   </div>
-                  <br><br><br>
-                  <div class="row" id="adduser" style="display:none;">
-                  	<div class="col-lg-3 text center">
-                  		<form:form action="${pageContext.request.contextPath}/admin/user/addUser" method="post">
-                  			<button class="btn btn-outline btn-primary btn-lg btn-block" type="submit">
-                  				Add Users
-                  			</button>
-                  		</form:form> 
-                  	</div>
-                  	<div class="col-lg-3 text center">
-                  		<form:form action="${pageContext.request.contextPath}/admin/user/editUser" method="post">
-                  			<button class="btn btn-outline btn-primary btn-lg btn-block" type="submit">
-                  				Edit Users
-                  			</button>
-                  		</form:form> 
-                  	</div>
-                  	<div class="col-lg-3 text center">
-                  		<form:form action="${pageContext.request.contextPath}/admin/user/deleteUser" method="post">
-                  			<button class="btn btn-outline btn-primary btn-lg btn-block" type="submit">
-                  				Delete Users
-                  			</button>
-                  		</form:form> 
-                  	</div>	
-                  	<div class="col-lg-3 text center">
-                  		<form:form action="${pageContext.request.contextPath}/admin/user/showAllUsers" method="post">
-                  			<button class="btn btn-outline btn-primary btn-lg btn-block" type="submit">
-                  				Show Users
-                  			</button>
-                  		</form:form> 
-                  	</div>	
+                  <div class="footer navbar-fixed-bottom text-right">
+                  			<h3 style="paddingi-right:5px;padding-bottom:5px;">${confirmation}</h3>
                   </div>
-
-                  <div class="row" id="addtable" style="display:none;">
-                  	<div class="col-lg-4 text center">
-                  		<form:form action="${pageContext.request.contextPath}/admin/table/addTable" method="post">
-                  			<button class="btn btn-outline btn-primary btn-lg btn-block" type="submit">
-                  				Add Tables
-                  			</button>
-                  		</form:form> 
-                  	</div>
-                  	<div class="col-lg-4 text center">
-                  		<form:form action="${pageContext.request.contextPath}/admin/table/deleteTable" method="post">
-                  			<button class="btn btn-outline btn-primary btn-lg btn-block" type="submit">
-                  				Delete tables
-                  			</button>
-                  		</form:form> 
-                  	</div>
-                  	<div class="col-lg-4 text center">
-                  		<form:form action="${pageContext.request.contextPath}/admin/table/showAllTables" method="post">
-                  			<button class="btn btn-outline btn-primary btn-lg btn-block" type="submit">
-                  				Show tables
-                  			</button>
-                  		</form:form> 
-                  	</div>
-                  </div>
-                	<div class="footer navbar-fixed-bottom">
-                  			<h3>${confirmation}</h3>
-                	</div>
-                  	
-                  
-            </div>
+               </div>
     </div>        
-    <script>
-    	function addUser()
-    	{
-    		var user = document.getElementById("adduser");
-    		var table = document.getElementById("addtable");
-    		if(table.style.display === "block")
-    			{
-    			table.style.display = "none";
-    			}
-    		user.style.display = "block";
-    	}
-    	function addTable()
-    	{
-    		var user = document.getElementById("adduser");
-    		var table = document.getElementById("addtable");
-    		if(user.style.display === "block")
-    			{
-    			user.style.display = "none";
-    			}
-    		table.style.display = "block";
-    	}
-    </script>
    	<%@include file="/WEB-INF/html/body/jsscripts.html" %>
 </body>
 

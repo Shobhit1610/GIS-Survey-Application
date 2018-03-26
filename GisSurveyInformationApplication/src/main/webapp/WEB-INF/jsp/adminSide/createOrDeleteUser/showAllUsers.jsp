@@ -16,7 +16,12 @@
             </div>
             <div class="row">
             	<div class="col-lg-12">
+            		<div class="form-group">
+            		<form:form action="${pageContext.request.contextPath}/admin/user/${link}" method="post">
             			<%@include file="/WEB-INF/jsp/adminSide/createOrDeleteUser/allUsersDetails.jsp" %>
+            			<button type="submit" class="btn btn-default">${process}</button>
+	            	</form:form>
+	            	</div>
 	            </div>
             </div>
          </div>

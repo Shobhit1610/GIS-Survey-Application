@@ -120,4 +120,8 @@ public class TableFieldsModel
 			return true;
 		return false;
 	}
+	public String toString()
+	{
+		return fieldID+fieldType+fieldRequired+fieldLabel+fieldID+fieldDesc+dataTypeID+dataType;
+	}
 }

@@ -1,5 +1,6 @@
 package oro.gis.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,11 +40,19 @@ public class AdminModifyTableController
 	
 	
 	@RequestMapping(value="/addTable",method=RequestMethod.POST)
-	public ModelAndView addTable(@ModelAttribute("tablenamedetails") TableNameModel tableName,@ModelAttribute("tablefieldsdetails") TableFieldsModel tableFields,HttpServletRequest request)
+	public ModelAndView addTable(@ModelAttribute("tablenamedetails") TableNameModel tableName,@ModelAttribute("tablefieldsdetails") ArrayList<TableFieldsModel>  tableFields,HttpServletRequest request)
 	{
 		int dataTypeID;
 		ModelAndView addTableView = new ModelAndView();
-		if(tableFields.status())
+		if(tableFields.size()>0)
+		{
+			for(TableFieldsModel field :tableFields)
+			{
+				System.out.println(field);
+			}
+			addTableView.setViewName("adminSide/adminPanel");
+		}
+		/*if(tableFields.status())
 		{
 			tableFieldsModelService.save(tableFields);
 			this.noOfColumns--;
@@ -72,9 +81,10 @@ public class AdminModifyTableController
 			dataTypeID=tableNameModelService.getCurrentDataTypeId();
 			request.setAttribute("datatypeid",dataTypeID);
 			addTableView.setViewName("adminSide/createOrDeleteTable/addTableFields");
-		}
+		}*/
 		else
 		{
+			addTableView.addObject("tablefieldlist", new ArrayList<TableFieldsModel>());
 			addTableView.setViewName("adminSide/createOrDeleteTable/addTableName");
 		}
 		return addTableView;
@@ -117,5 +127,7 @@ public class AdminModifyTableController
 		showTableView.setViewName("adminSide/createOrDeleteTable/showAllTables");
 		return showTableView;
 	}
+	
+  
 
 }

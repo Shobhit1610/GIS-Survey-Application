@@ -107,17 +107,22 @@ public class AdminModifyUserController
 	}
 
 	//Run when admin want to delete any user
-	@RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
-	public ModelAndView deleteUser(HttpServletRequest request) 
+	@RequestMapping(value = "/showUsers", method = RequestMethod.POST)
+	public ModelAndView showAllUsers(HttpServletRequest request) 
 	{
 		ModelAndView deleteUserView = new ModelAndView();
 		
 		//Run when admin sent the user id of deleted user
-		if((String) request.getParameter("option")!=null)
+		if(request.getParameterValues("tableDeleted")!=null)
 		{
-			int id = Integer.parseInt((String) request.getParameter("option"));
-			userDetailsTableService.delete(new UserDetailsTable(id));
-			request.setAttribute("confirmation", "Record deleted Successfully");
+			int id;
+			String[] values = request.getParameterValues("tableDeleted");
+			for(String value : values)
+			{
+				id = Integer.parseInt(value);
+				userDetailsTableService.delete(new UserDetailsTable(id));
+			}
+			request.setAttribute("confirmation", "Records deleted Successfully");
 			long users = userDetailsTableService.count();
 			long tables = tableNameModelService.count();
 			placeholders = new HashMap<String,Object>();
@@ -131,10 +136,10 @@ public class AdminModifyUserController
 		{
 			placeholders = new HashMap<String,Object>();
 			placeholders.put("details",userDetailsTableService.getUserList());
-			placeholders.put("link","deleteUser");
+			placeholders.put("link","showUsers");
 			placeholders.put("process","Delete");
 			placeholders.put("show",true);
-			deleteUserView.setViewName("adminSide/createOrDeleteUser/deleteUser");
+			deleteUserView.setViewName("adminSide/createOrDeleteUser/showAllUsers");
 		}
 		deleteUserView.addAllObjects(placeholders);
 		return deleteUserView;
@@ -148,7 +153,7 @@ public class AdminModifyUserController
 		ModelAndView showAllUsersView = new ModelAndView();
 		placeholders = new HashMap<String,Object>();
 		placeholders.put("details",userDetailsTableService.getUserList());
-		placeholders.put("show",false);
+		placeholders.put("show",true);
 		showAllUsersView.addAllObjects(placeholders);
 		showAllUsersView.setViewName("adminSide/createOrDeleteUser/showAllUsers");
 		return showAllUsersView;

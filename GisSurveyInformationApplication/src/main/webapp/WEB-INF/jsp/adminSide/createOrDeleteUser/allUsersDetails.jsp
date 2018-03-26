@@ -19,7 +19,7 @@
             						<tbody>
             							<stl:forEach var="user" items="${details}">
 											<tr>
-												<stl:if test="${show}"><td><input type="radio" name="tableDeleted" value="${user.user_id}" class=""/></td></stl:if>
+												<stl:if test="${show}"><td><input type="checkbox" name="tableDeleted" value="${user.user_id}" class="checkbox"/></td></stl:if>
 												<td>${user.user_id}</td>
 												<td>${user.name}</td>
 												<td>${user.username}</td>
