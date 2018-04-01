@@ -1,10 +1,13 @@
 package oro.gis.service.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
 import oro.gis.model.UserDetailsTable;
 import oro.gis.service.custom.UserDetailsTableCustomService;
@@ -13,6 +16,11 @@ public class UserDetailsTableServiceImpl implements UserDetailsTableCustomServic
 {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+	
+	public UserDetailsTable getObject()
+	{
+		return new UserDetailsTable();
+	}
 	
 	public List<Map<String,Object>> getUserList()
 	{
@@ -39,4 +47,26 @@ public class UserDetailsTableServiceImpl implements UserDetailsTableCustomServic
 		int id = this.jdbcTemplate.queryForObject("select user_id from userdetails where username=? AND password = ?",new Object[] {userDetailsTable.getUsername(),userDetailsTable.getPassword()},Integer.class);
 		return id;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public UserDetailsTable getUserObjectByID(int userid)
+	{
+		UserDetailsTable requiredObject = (UserDetailsTable)this.jdbcTemplate.queryForObject(
+														"select * from userdetails where user_id = ?",
+														new Object[] {userid},
+														new RowMapper() {
+																			@Override
+																			public Object mapRow(ResultSet rs, int rowNum) throws SQLException 
+																			{
+																				UserDetailsTable user = new UserDetailsTable();
+																				user.setUserid(rs.getInt("user_id"));
+																				user.setName(rs.getString("name"));
+																				user.setUsername(rs.getString("username"));
+																				user.setPassword(rs.getString("password"));
+																				return user;
+																			}
+																		});
+		return requiredObject;
+	}
+	
 }

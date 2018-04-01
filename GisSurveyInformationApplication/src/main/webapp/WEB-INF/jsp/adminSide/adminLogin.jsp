@@ -14,20 +14,20 @@
                         <h3 class="panel-title">Sign In</h3>
                     </div>
                     <div class="panel-body">
-                        <form:form action="${pageContext.request.contextPath}/admin" method="post" commandName="adminDetails" role="form">
+                        <form action="${pageContext.request.contextPath}/admin/login" method="post">
                             <fieldset>
                                 <div class="form-group">
-                                    <form:input cssClass="form-control" placeholder="Username" name="email" type="text" autofocus="autofocus" path="adminUsername"/>
+                                    <input name="username" type="text" class="form-control" placeholder=" Username"  autofocus="true"/>
                                 </div>
                                 <div class="form-group">
-                                    <form:input cssClass="form-control" placeholder="Password" name="password" type="password" autofocus="autofocus" path="adminPassword"/>
+                                    <input name="password" type="password" class="form-control" placeholder=" Password"  autofocus="true"/>
                                 </div>
                                 <div>
                     				<h4>${error}</h4>
                     			</div>
                                 <button type="submit" class="btn btn-lg btn-success btn-block">Login</button>
                             </fieldset>
-                        </form:form>
+                        </form>
                     </div>
                     
                 </div>

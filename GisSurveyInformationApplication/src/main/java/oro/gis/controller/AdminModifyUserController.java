@@ -1,15 +1,16 @@
 package oro.gis.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import oro.gis.model.UserDetailsTable;
@@ -28,134 +29,129 @@ public class AdminModifyUserController
 	
 	@Autowired
 	TableNameModelService tableNameModelService;
+
+	@RequestMapping(value="",method=RequestMethod.GET)
+	public ModelAndView index(Model model)
+	{
+		ModelAndView indexView = new ModelAndView();
+		long users = userDetailsTableService.count();
+		long tables = tableNameModelService.count();
+		Map<String,Object> placeholder = new HashMap<String,Object>();
+		placeholder.put("users_count",users);
+		placeholder.put("tables_count", tables);
+		indexView.addAllObjects(placeholder);
+		indexView.setViewName("adminSide/adminPanel");
+		return indexView;
+	}
 	
-	private int id;
-
-
-	// Run when admin click on Add Users
-	@RequestMapping(value = "/addUser", method = RequestMethod.POST)
-	public ModelAndView addUser(@ModelAttribute("userDetails") UserDetailsTable userDetails,HttpServletRequest request) 
+	@RequestMapping(value="/addUser",method=RequestMethod.GET)
+	public ModelAndView addUser()
 	{
 		ModelAndView addUserView = new ModelAndView();
 		
-		//Run when details are provided by admin
-		if (userDetails.status()) 
-		{
-			userDetailsTableService.save(userDetails);
-			request.setAttribute("confirmation", "Record Added Successfully");
-			long users = userDetailsTableService.count();
-			long tables = tableNameModelService.count();
 			placeholders = new HashMap<String,Object>();
-			placeholders.put("users_count",users);
-			placeholders.put("tables_count", tables);
-			addUserView.setViewName("adminSide/adminPanel");
-		}
-		
-		//First run asking details of user from admin
-		else
-		{
-			placeholders = new HashMap<String,Object>();
-			placeholders.put("link","addUser");
-			placeholders.put("process","Add");
+			placeholders.put("userDetails",userDetailsTableService.getObject());
+			
+			addUserView.addAllObjects(placeholders);
 			addUserView.setViewName("adminSide/createOrDeleteUser/addUser");
-		}
-		addUserView.addAllObjects(placeholders);
+			
 		return addUserView;
 	}
 	
-	//Run when admin request to edit a user
-	@RequestMapping(value = "/editUser", method = RequestMethod.POST)
-	public ModelAndView editUser(@ModelAttribute("userDetails") UserDetailsTable userDetails,HttpServletRequest request) 
+	@RequestMapping(value = "/addUser", method = RequestMethod.POST)
+	public ModelAndView addUser(@ModelAttribute("userDetails") UserDetailsTable userDetails) 
 	{
-		placeholders = new HashMap<String,Object>();
+		ModelAndView addUserView = new ModelAndView();
+			
+			userDetailsTableService.save(userDetails);
+		
+			long users = userDetailsTableService.count();
+			long tables = tableNameModelService.count();
+			placeholders = new HashMap<String,Object>();
+			placeholders.put("confirmation","Record Added Successfully");
+			placeholders.put("users_count",users);
+			placeholders.put("tables_count", tables);
+			
+			addUserView.addAllObjects(placeholders);
+			addUserView.setViewName("adminSide/adminPanel");
+		
+		return addUserView;
+	}
+	
+	@RequestMapping(value="/showUsers",method=RequestMethod.GET)
+	public ModelAndView showUsers()
+	{
+		ModelAndView showUsersView = new ModelAndView();
+		
+			placeholders = new HashMap<String,Object>();
+			placeholders.put("details",userDetailsTableService.getUserList());
+		
+			showUsersView.addAllObjects(placeholders);
+			showUsersView.setViewName("adminSide/createOrDeleteUser/showAllUsers");
+		
+		return showUsersView;
+	}
+	
+	@RequestMapping(value = "/editUser", method = RequestMethod.GET)
+	public ModelAndView editUser(@RequestParam("userid") String userId) 
+	{
 		ModelAndView editUserView = new ModelAndView();
 		
-		//Run when recieve a model object with updated details
-		if (userDetails.status()) 
-		{
-			userDetailsTableService.update(userDetails,this.id);
-			request.setAttribute("confirmation", "Record Updated Successfully");
+			int id = Integer.parseInt(userId);
+			
+			placeholders = new HashMap<String,Object>();
+			placeholders.put("newuserDetails", userDetailsTableService.getObject());
+			placeholders.put("olddetails",userDetailsTableService.getUserObjectByID(id));
+			
+			editUserView.addAllObjects(placeholders);
+			editUserView.setViewName("adminSide/createOrDeleteUser/editUser");
+		
+		return editUserView;
+	}
+	
+	@RequestMapping(value="/editUser",method=RequestMethod.POST)
+	public ModelAndView editUser(@ModelAttribute("newuserDetails") UserDetailsTable newUserDetails,@RequestParam("userid") String userId)
+	{
+		ModelAndView editUserView = new ModelAndView();
+		
+			int id = Integer.parseInt(userId);
+			userDetailsTableService.update(newUserDetails,id);
+			
 			long users = userDetailsTableService.count();
 			long tables = tableNameModelService.count();
 			placeholders = new HashMap<String,Object>();
 			placeholders.put("users_count",users);
 			placeholders.put("tables_count", tables);
-			editUserView.setViewName("adminSide/adminPanel");
-		}
+			placeholders.put("confirmation", "Records deleted Successfully");
 		
-		//Accept the id and now ask for new details
-		else if((String) request.getParameter("option")!=null)
-		{
-		    this.id = Integer.parseInt((String) request.getParameter("option"));
-			placeholders.put("link","editUser");
-			placeholders.put("process","Edit");
 			editUserView.addAllObjects(placeholders);
-			editUserView.setViewName("adminSide/createOrDeleteUser/addUser");
-		}
+			editUserView.setViewName("adminSide/adminPanel");
 		
-		//Run to ask admin which user need to be updated
-		else
-		{
-			placeholders.put("details",userDetailsTableService.getUserList());
-			placeholders.put("link","editUser");
-			placeholders.put("process","Edit");
-			placeholders.put("show",true);
-			editUserView.setViewName("adminSide/createOrDeleteUser/deleteUser");
-		}
-		editUserView.addAllObjects(placeholders);
 		return editUserView;
 	}
 
-	//Run when admin want to delete any user
-	@RequestMapping(value = "/showUsers", method = RequestMethod.POST)
-	public ModelAndView showAllUsers(HttpServletRequest request) 
+	@RequestMapping(value = "/deleteUsers", method = RequestMethod.POST)
+	public ModelAndView deleteUsers(@RequestParam("usersDeleted") List<String> values) 
 	{
 		ModelAndView deleteUserView = new ModelAndView();
 		
-		//Run when admin sent the user id of deleted user
-		if(request.getParameterValues("tableDeleted")!=null)
-		{
-			int id;
-			String[] values = request.getParameterValues("tableDeleted");
 			for(String value : values)
 			{
-				id = Integer.parseInt(value);
+				int id = Integer.parseInt(value);
 				userDetailsTableService.delete(new UserDetailsTable(id));
 			}
-			request.setAttribute("confirmation", "Records deleted Successfully");
+			
 			long users = userDetailsTableService.count();
 			long tables = tableNameModelService.count();
 			placeholders = new HashMap<String,Object>();
 			placeholders.put("users_count",users);
 			placeholders.put("tables_count", tables);
+			placeholders.put("confirmation", "Records deleted Successfully");
+		
+			deleteUserView.addAllObjects(placeholders);
 			deleteUserView.setViewName("adminSide/adminPanel");
-		}
 		
-		//Run to ask admin which user to delete from list
-		else
-		{
-			placeholders = new HashMap<String,Object>();
-			placeholders.put("details",userDetailsTableService.getUserList());
-			placeholders.put("link","showUsers");
-			placeholders.put("process","Delete");
-			placeholders.put("show",true);
-			deleteUserView.setViewName("adminSide/createOrDeleteUser/showAllUsers");
-		}
-		deleteUserView.addAllObjects(placeholders);
 		return deleteUserView;
-		
 	}
-
-	//Run when all details are asked
-	@RequestMapping(value = "/showAllUsers", method = RequestMethod.POST)
-	public ModelAndView showAllUsers()
-	{
-		ModelAndView showAllUsersView = new ModelAndView();
-		placeholders = new HashMap<String,Object>();
-		placeholders.put("details",userDetailsTableService.getUserList());
-		placeholders.put("show",true);
-		showAllUsersView.addAllObjects(placeholders);
-		showAllUsersView.setViewName("adminSide/createOrDeleteUser/showAllUsers");
-		return showAllUsersView;
-	}
+	
 }

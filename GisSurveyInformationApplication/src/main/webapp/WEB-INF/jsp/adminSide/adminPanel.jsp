@@ -1,4 +1,5 @@
 <%@include file="/WEB-INF/html/head/directives.html" %>
+<%@page import="oro.gis.service.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -6,6 +7,7 @@
 		<%@include file="/WEB-INF/html/head/csslinks.html" %>
 </head>
 <body>
+	
 	<%@include file="/WEB-INF/html/body/adminnavigationheader.html" %>
 	<div id="wrapper">
 
@@ -21,30 +23,33 @@
                 <div class="col-lg-6 col-md-3 text-center">
                     <div class="panel panel-primary">
                         <div class="panel-heading ">
-                            <div class="row">
-                                <div class="col-xs-12">
+                        	<div class="row">
+                        		<div class="col-xs-3">
+                        		<i class="fa fa-users fa-5x"></i>
+                        		</div>
+                                <div class="col-xs-9 text-right">
                                     <div class="huge">${users_count}</div>
-                                    <div>Users registered</div>
+                                    <div><h4>Users registered</h4></div>
                                 </div>
                             </div>
-                        </div>
+                          </div>
                             <div class="panel-footer">
-                                <div class="row">
+                            	<div class="row">
                                 	<div class="col-xs-6">
-                                		<form:form action="${pageContext.request.contextPath}/admin/user/addUser" method="post" >
-                  							<button class="btn btn-outline btn-primary btn-lg btn-block" type="submit" style="border:none;">
+                                			<a href = "${pageContext.request.contextPath}/admin/user/addUser" style="text-decoration: none;">
+                                			<button class="btn btn-outline btn-primary btn-lg btn-block" type="button" style="border:none;">
                   								Add Users
                   							</button>
-                				  		</form:form> 
-                                	</div>
+                  							</a>
+                                   	</div>
                                 	<div class="col-xs-6">
-                                		<form:form action="${pageContext.request.contextPath}/admin/user/showUsers" method="post">
-                  							<button class="btn btn-no-border btn-outline btn-primary btn-lg btn-block btn-no-border"  style="border:none;" type="submit">
+                                		<a href = "${pageContext.request.contextPath}/admin/user/showUsers" style="text-decoration: none;">
+                  							<button class="btn btn-no-border btn-outline btn-primary btn-lg btn-block btn-no-border"  style="border:none;" type="button">
                   								Show Users
                   							</button>
-                  						</form:form>
+                  						</a>	
                                 	</div>
-                                </div>
+                                </div> 
                             </div>
                        </div>
                 </div>
@@ -52,29 +57,32 @@
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <div class="row">
-                                <div class="col-xs-12 text-center">
+                            	<div class="col-xs-3">
+                        			<i class="fa fa-table fa-5x"></i>
+                        		</div>
+                                <div class="col-xs-9 text-right">
                                     <div class="huge">${tables_count}</div>
-                                    <div>Tables made</div>
+                                    <div><h4>Tables made</h4></div>
                                 </div>
                             </div>
                         </div>
                            <div class="panel-footer">
-                               <div class="row">
-                               		<div class="col-xs-6">
-                               			<form:form action="${pageContext.request.contextPath}/admin/table/addTable" method="post">
-                  							<button class="btn btn-outline btn-primary btn-lg btn-block" type="submit" style="border:none;">
+                            	<div class="row">
+                                	<div class="col-xs-6">
+                                			<a href = "${pageContext.request.contextPath}/admin/table/addTable" style="text-decoration: none;">
+                                			<button class="btn btn-outline btn-primary btn-lg btn-block" type="button" style="border:none;">
                   								Add Tables
                   							</button>
-                  						</form:form>
-                               		</div>
-                               		<div class="col-xs-6">
-                               			<form:form action="${pageContext.request.contextPath}/admin/table/deleteTable" method="post">
-                  							<button class="btn btn-outline btn-primary btn-lg btn-block" type="submit" style="border:none;">
+                  							</a>
+                                   	</div>
+                                	<div class="col-xs-6">
+                                		<a href = "${pageContext.request.contextPath}/admin/table/showTables" style="text-decoration: none;">
+                  							<button class="btn btn-no-border btn-outline btn-primary btn-lg btn-block btn-no-border"  style="border:none;" type="button">
                   								Show Tables
                   							</button>
-                  						</form:form>
-                               		</div>
-                               </div>
+                  						</a>	
+                                	</div>
+                                </div> 
                             </div>
                     	</div>
                		 </div>

@@ -1,20 +1,21 @@
 package oro.gis.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import oro.gis.model.TableFieldsModel;
-import oro.gis.model.TableNameModel;
+import oro.gis.model.UserDetailsTable;
 import oro.gis.service.TableFieldsModelService;
 import oro.gis.service.TableNameModelService;
 import oro.gis.service.UserDetailsTableService;
@@ -24,8 +25,6 @@ import oro.gis.service.UserDetailsTableService;
 public class AdminModifyTableController 
 {
 
-	private int noOfColumns;
-	
 	@Autowired
 	private TableNameModelService tableNameModelService;
 	
@@ -38,96 +37,103 @@ public class AdminModifyTableController
 	@Autowired
 	private Map<String,Object> placeholders;
 	
+	@RequestMapping(value="",method=RequestMethod.GET)
+	public ModelAndView index(Model model)
+	{
+		ModelAndView indexView = new ModelAndView();
+		
+			long users = userDetailsTableService.count();
+			long tables = tableNameModelService.count();
+			Map<String,Object> placeholder = new HashMap<String,Object>();
+			placeholder.put("users_count",users);
+			placeholder.put("tables_count", tables);
+			indexView.addAllObjects(placeholder);
+			indexView.setViewName("adminSide/adminPanel");
+			
+		return indexView;
+	}
+	
+	@RequestMapping(value="/addTable",method=RequestMethod.GET)
+	public ModelAndView addTable()
+	{
+		ModelAndView addTableView = new ModelAndView();
+			
+			addTableView.setViewName("adminSide/createOrDeleteTable/addTable");
+		
+		return addTableView;
+	}
 	
 	@RequestMapping(value="/addTable",method=RequestMethod.POST)
-	public ModelAndView addTable(@ModelAttribute("tablenamedetails") TableNameModel tableName,@ModelAttribute("tablefieldsdetails") ArrayList<TableFieldsModel>  tableFields,HttpServletRequest request)
+	public ModelAndView addTable(HttpServletRequest request)
 	{
-		int dataTypeID;
 		ModelAndView addTableView = new ModelAndView();
-		if(tableFields.size()>0)
-		{
-			for(TableFieldsModel field :tableFields)
+		
+			tableNameModelService.save(tableNameModelService.getObject(request.getParameter("tablename.dataTypeName"), request.getParameter("tablename.dataTypeDescription"), request.getParameter("tablename.active")));
+			
+			int id = tableNameModelService.getCurrentDataTypeId();
+			int fieldNumber = Integer.parseInt(request.getParameter("field-no"));
+			for(int i =0;i<fieldNumber;i++)
 			{
-				System.out.println(field);
+				String fieldLabel = request.getParameter("field["+i+"].fieldLabel");
+				String fieldDesc = request.getParameter("field["+i+"].fieldDesc");
+				String fieldType = request.getParameter("field["+i+"].fieldType");
+				String dataType = request.getParameter("field["+i+"].fieldLabel");
+				int dataTypeID = id;
+				String fieldRequired = request.getParameter("field["+i+"].fieldRequired");
+				int sequence = Integer.parseInt(request.getParameter("field["+i+"].sequence"));
+				
+				tableFieldsModelService.save(tableFieldsModelService.getObject(fieldLabel, fieldDesc, fieldType, dataType, dataTypeID, fieldRequired, sequence));
 			}
+			
+			long users = userDetailsTableService.count();
+			long tables = tableNameModelService.count();
+			Map<String,Object> placeholder = new HashMap<String,Object>();
+			placeholder.put("users_count",users);
+			placeholder.put("tables_count", tables);
+			addTableView.addAllObjects(placeholder);
 			addTableView.setViewName("adminSide/adminPanel");
-		}
-		/*if(tableFields.status())
-		{
-			tableFieldsModelService.save(tableFields);
-			this.noOfColumns--;
-			if(noOfColumns!= 0)
-			{
-				request.setAttribute("noOfColumns",noOfColumns);
-				addTableView.setViewName("adminSide/createOrDeleteTable/addTableFields");
-			}
-			else
-			{
-				request.setAttribute("confirmation","Table and its fields added Successfully");
-				long users = userDetailsTableService.count();
-				long tables = tableNameModelService.count();
-				placeholders = new HashMap<String,Object>();
-				placeholders.put("users_count",users);
-				placeholders.put("tables_count", tables);
-				addTableView.addAllObjects(placeholders);
-				addTableView.setViewName("adminSide/adminPanel");
-			}
-		}
-		else if(tableName.status())
-		{
-			tableNameModelService.save(tableName);
-			this.noOfColumns = Integer.parseInt(request.getParameter("totalColumns"));
-			request.setAttribute("noOfColumns",noOfColumns);
-			dataTypeID=tableNameModelService.getCurrentDataTypeId();
-			request.setAttribute("datatypeid",dataTypeID);
-			addTableView.setViewName("adminSide/createOrDeleteTable/addTableFields");
-		}*/
-		else
-		{
-			addTableView.addObject("tablefieldlist", new ArrayList<TableFieldsModel>());
-			addTableView.setViewName("adminSide/createOrDeleteTable/addTableName");
-		}
+			
 		return addTableView;
 				
 	}
 	
-	@RequestMapping(value="/deleteTable",method=RequestMethod.POST)
-	public ModelAndView deleteTable(HttpServletRequest request)
+	@RequestMapping(value="/showTables",method=RequestMethod.GET)
+	public ModelAndView showUsers()
 	{
-		ModelAndView deletedTableView = new ModelAndView();
-		if(request.getParameter("tableDeleted")==null)
-		{
-			deletedTableView.addObject("details",tableNameModelService.getAllTables());
-			deletedTableView.addObject("show",true);
-			deletedTableView.setViewName("adminSide/createOrDeleteTable/deleteTable");
-		}
-		else
-		{
-		int id = Integer.parseInt((String)request.getParameter("tableDeleted"));
-		tableNameModelService.delete(new TableNameModel(id));
-		tableFieldsModelService.deleteAllByDataTypeID(id);
-		request.setAttribute("confirmation","Table and its fields deleted Successfully");
-		long users = userDetailsTableService.count();
-		long tables = tableNameModelService.count();
-		placeholders = new HashMap<String,Object>();
-		placeholders.put("users_count",users);
-		placeholders.put("tables_count", tables);
-		deletedTableView.addAllObjects(placeholders);
-		deletedTableView.setViewName("adminSide/adminPanel");
-		}
-		return deletedTableView;
+		ModelAndView showUsersView = new ModelAndView();
+		
+			placeholders = new HashMap<String,Object>();
+			placeholders.put("details",tableNameModelService.getAllTables());
+		
+			showUsersView.addAllObjects(placeholders);
+			showUsersView.setViewName("adminSide/createOrDeleteTable/showAllTables");
+		
+		return showUsersView;
 	}
 	
-	@RequestMapping(value="/showAllTables" ,method=RequestMethod.POST)
-	public ModelAndView showAllTables()
+		
+	@RequestMapping(value = "/deleteTables", method = RequestMethod.POST)
+	public ModelAndView deleteUsers(@RequestParam("tablesDeleted") List<String> values) 
 	{
-		ModelAndView showTableView = new ModelAndView();
-		showTableView.addObject("details",tableNameModelService.getAllTables());
-		showTableView.addObject("show",false);
-		showTableView.setViewName("adminSide/createOrDeleteTable/showAllTables");
-		return showTableView;
+		ModelAndView deleteTableView = new ModelAndView();
+		
+			for(String value : values)
+			{
+				int id = Integer.parseInt(value);
+				tableNameModelService.delete(tableNameModelService.getObject(id));
+				tableFieldsModelService.delete(tableFieldsModelService.getObject(id));
+			}
+			
+			long users = userDetailsTableService.count();
+			long tables = tableNameModelService.count();
+			placeholders = new HashMap<String,Object>();
+			placeholders.put("users_count",users);
+			placeholders.put("tables_count", tables);
+			placeholders.put("confirmation", "Records deleted Successfully");
+		
+			deleteTableView.addAllObjects(placeholders);
+			deleteTableView.setViewName("adminSide/adminPanel");
+		
+		return deleteTableView;
 	}
-	
-  
-
 }
