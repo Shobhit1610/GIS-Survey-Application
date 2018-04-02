@@ -8,10 +8,14 @@ import oro.gis.model.UserDetailsTable;
 public interface UserDetailsTableCustomService
 {
 	public UserDetailsTable getObject();
-	public List<Map<String,Object>> getUserList();  
-	public boolean verify(String userName,String password);
-	public void update(UserDetailsTable userDetails, int id);
-	public int getUserIDByObject(UserDetailsTable userDetailsTable);
+	
+	public List<Map<String,Object>> getUserList(); 
+	
 	public UserDetailsTable getUserObjectByID(int userid);
 	
+	public void update(UserDetailsTable userDetails, int id);
+	
+	public boolean verify(String userName,String password);
+	
+	public UserDetailsTable getUserObjectByCredentials(String username,String password);
 }

@@ -34,6 +34,11 @@ public class EntryMakerModel
 	{
 		this.entryDate = new Date();
 	}
+	public EntryMakerModel(int userID)
+	{
+		this.entryDate = new Date();
+		this.userID = userID;
+	}
 	public int getEntryID() {
 		return entryID;
 	}

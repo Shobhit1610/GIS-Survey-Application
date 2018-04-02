@@ -103,7 +103,7 @@ public class AdminModifyTableController
 		ModelAndView showUsersView = new ModelAndView();
 		
 			placeholders = new HashMap<String,Object>();
-			placeholders.put("details",tableNameModelService.getAllTables());
+			placeholders.put("details",tableNameModelService.getTablesList());
 		
 			showUsersView.addAllObjects(placeholders);
 			showUsersView.setViewName("adminSide/createOrDeleteTable/showAllTables");

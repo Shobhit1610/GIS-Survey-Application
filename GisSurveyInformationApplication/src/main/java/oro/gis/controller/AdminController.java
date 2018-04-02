@@ -3,18 +3,13 @@ package oro.gis.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import oro.gis.bean.AdminDetailsBean;
 import oro.gis.service.TableNameModelService;
 import oro.gis.service.UserDetailsTableService;
 
@@ -32,13 +27,15 @@ public class AdminController
 	public ModelAndView index(Model model)
 	{
 		ModelAndView indexView = new ModelAndView();
-		long users = userDetailsTableService.count();
-		long tables = tableNameModelService.count();
-		Map<String,Object> placeholder = new HashMap<String,Object>();
-		placeholder.put("users_count",users);
-		placeholder.put("tables_count", tables);
-		indexView.addAllObjects(placeholder);
-		indexView.setViewName("adminSide/adminPanel");
+		
+			long users = userDetailsTableService.count();
+			long tables = tableNameModelService.count();
+			Map<String,Object> placeholder = new HashMap<String,Object>();
+			placeholder.put("users_count",users);
+			placeholder.put("tables_count", tables);
+			indexView.addAllObjects(placeholder);
+			indexView.setViewName("adminSide/adminPanel");
+			
 		return indexView;
 	}
 	
@@ -47,9 +44,14 @@ public class AdminController
 	{
 		ModelAndView loginView = new ModelAndView();
 		
-		if(logout!=null)
-			loginView.addObject("error","Logout Succesfull");
-		loginView.setViewName("adminSide/adminLogin");
+			if(error!=null)
+				loginView.addObject("error","Wrong credentials...");
+		
+			if(logout!=null)
+				loginView.addObject("error","Successfully logged out...");
+			
+			loginView.setViewName("adminSide/adminLogin");
+			
 		return loginView;
 	}
 

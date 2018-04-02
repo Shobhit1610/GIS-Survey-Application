@@ -1,5 +1,4 @@
 <%@include file="/WEB-INF/html/head/directives.html" %>
-<%@page import="oro.gis.service.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -87,7 +86,7 @@
                     	</div>
                		 </div>
                   </div>
-                  <div class="footer navbar-fixed-bottom text-right">
+                  <div class="footer navbar-fixed-bottom text-center">
                   			<h3 style="paddingi-right:5px;padding-bottom:5px;">${confirmation}</h3>
                   </div>
                </div>

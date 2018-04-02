@@ -122,7 +122,7 @@ public class AdminModifyUserController
 			placeholders = new HashMap<String,Object>();
 			placeholders.put("users_count",users);
 			placeholders.put("tables_count", tables);
-			placeholders.put("confirmation", "Records deleted Successfully");
+			placeholders.put("confirmation", "Record edited Successfully");
 		
 			editUserView.addAllObjects(placeholders);
 			editUserView.setViewName("adminSide/adminPanel");

@@ -1,6 +1,5 @@
 package oro.gis.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,22 +7,20 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import oro.gis.model.EntryMakerModel;
 import oro.gis.model.EntryValuesModel;
-import oro.gis.model.TableFieldsModel;
 import oro.gis.model.UserDetailsTable;
 import oro.gis.service.EntryMakerModelService;
 import oro.gis.service.EntryValuesModelService;
 import oro.gis.service.TableFieldsModelService;
 import oro.gis.service.TableNameModelService;
 import oro.gis.service.UserDetailsTableService;
-
 @Controller
 @RequestMapping(value = "/user")
 public class UserController {
@@ -43,63 +40,107 @@ public class UserController {
 	EntryMakerModelService entryMakerModelService;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public ModelAndView index(Model model) {
+	public ModelAndView index(HttpServletRequest request) 
+	{
 		ModelAndView indexView = new ModelAndView();
-		model.addAttribute("userDetails", new UserDetailsTable());
-		indexView.setViewName("userSide/userLogin");
+			
+			HttpSession session = request.getSession(false);
+			if(session==null || session.getAttribute("UserLogged")==null)
+			{
+				indexView.addObject("userDetails", new UserDetailsTable());
+				indexView.setViewName("home");
+			}
+					else
+			{
+				indexView.addObject("details", tableNameModelService.getTablesList());		
+				indexView.setViewName("userSide/userPanel");
+			}
+			
 		return indexView;
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
-	public ModelAndView userLogin(@ModelAttribute("userDetails") UserDetailsTable userDetails,
-			HttpServletRequest request,HttpSession session)
+	public ModelAndView userLogin(@ModelAttribute("userDetails") UserDetailsTable userDetails,HttpServletRequest request)
 	{
 		ModelAndView userLoginView = new ModelAndView();
-		if (userDetailsTableService.verify(userDetails.getUsername(), userDetails.getPassword())) 
-		{
-			userLoginView.setViewName("userSide/userPanel");
-			userLoginView.addObject("details", tableNameModelService.getAllTables());
-			System.out.println(userDetails.getUserid());
-			session.setAttribute("UserDetails",userDetails);
-		} else {
-			request.setAttribute("error", "Wrong Details...");
-			userLoginView.setViewName("userSide/userLogin");
-		}
+			
+			if (userDetailsTableService.verify(userDetails.getUsername(), userDetails.getPassword())) 
+			{
+				HttpSession session = request.getSession();
+				session.setAttribute("UserLogged",true);
+				session.setAttribute("UserCredentials", userDetailsTableService.getUserObjectByCredentials(userDetails.getUsername(),userDetails.getPassword()));
+				
+				userLoginView.addObject("details", tableNameModelService.getTablesList());
+				userLoginView.setViewName("userSide/userPanel");
+				
+			} 
+			else
+			{
+				userLoginView.addObject("error","Wrong Details..");
+				userLoginView.setViewName("home");
+			}
+			
 		return userLoginView;
 	}
 
-	@RequestMapping(value = "/addEntry", method = RequestMethod.POST)
-	public ModelAndView userPanel(HttpServletRequest request) {
-		ModelAndView userPanelView = new ModelAndView();
-		int id = Integer.parseInt(request.getParameter("option"));
-		List<TableFieldsModel> fieldDetails = tableFieldModelService.getAllTableDetails(id);
-		userPanelView.addObject("fielddetails",fieldDetails);
-		//userPanelView.addObject("fieldvalues",fieldValues);
-		userPanelView.setViewName("userSide/userFieldsPanel");
-		return userPanelView;
+	@RequestMapping(value = "/addEntry", method = RequestMethod.GET)
+	public ModelAndView addEntry(@RequestParam("tableid") String tableid , HttpServletRequest request)
+	{
+		ModelAndView addEntryView = new ModelAndView();
+			
+			HttpSession session = request.getSession();
+			if(session==null || session.getAttribute("UserLogged")==null)
+			{
+				addEntryView.addObject("userDetails", new UserDetailsTable());
+				addEntryView.setViewName("home");
+			}
+			else
+			{
+				int datatype_id = Integer.parseInt(tableid);
+				request.setAttribute("fielddetails",tableFieldModelService.getTablesList(datatype_id));
+				addEntryView.setViewName("userSide/userFieldEntry");
+			}
+			
+		return addEntryView;
 	}
-
-	@RequestMapping(value="/saveEntry", method=RequestMethod.POST)
-	public ModelAndView saveValues(HttpServletRequest request,HttpSession session) 
+	
+	@RequestMapping(value="/addEntry", method=RequestMethod.POST)
+	public ModelAndView saveValues(HttpServletRequest request) 
 	{
 		ModelAndView saveEntryView = new ModelAndView();
-		Map<String, String[]> fieldVauesMap = request.getParameterMap();
-		List<EntryValuesModel> fieldValues = entryValuesModelService.getEmptyFieldValues();
-		EntryValuesModel temp = entryValuesModelService.getEntryValuesModelObject();
-		EntryMakerModel user = new EntryMakerModel();
-		UserDetailsTable detailsTable = (UserDetailsTable)session.getAttribute("UserDetails");
-		int id = userDetailsTableService.getUserIDByObject(detailsTable);
-		user.setUserID(id);
-		entryMakerModelService.save(user);
-		for(String x : fieldVauesMap.keySet())
-		{
-			temp.setFieldID(Integer.parseInt(x));
-			temp.setFieldValue(fieldVauesMap.get(x)[0]);
-			temp.setEntryID(id);
-			entryValuesModelService.save(temp);
-		}
-		saveEntryView.addObject("details", tableNameModelService.getAllTables());
-		saveEntryView.setViewName("userSide/userPanel");
+		
+			HttpSession session = request.getSession();
+			UserDetailsTable userDetails = (UserDetailsTable)session.getAttribute("UserCredentials");
+			
+			int userid = userDetails.getUserid();
+			entryMakerModelService.save(new EntryMakerModel(userid));
+		
+			Map<String, String[]> fieldVauesMap = request.getParameterMap();
+			EntryValuesModel entryValues = new EntryValuesModel();
+			for(String x : fieldVauesMap.keySet())
+			{
+				entryValues.setEntryID(userDetails.getUserid());
+				entryValues.setFieldID(Integer.parseInt(x));
+				entryValues.setFieldValue(fieldVauesMap.get(x)[0]);
+				entryValuesModelService.save(entryValues);
+			}
+			
+			saveEntryView.addObject("confirmation","Data added Succesfully");
+			saveEntryView.addObject("details", tableNameModelService.getTablesList());		
+			saveEntryView.setViewName("userSide/userPanel");
 		return saveEntryView;
+	}
+	
+	@RequestMapping(value="/logout", method=RequestMethod.GET)
+	public ModelAndView logout(HttpServletRequest request)
+	{
+		ModelAndView logoutView = new ModelAndView();
+		
+			HttpSession session = request.getSession();
+			session.invalidate();
+			logoutView.setViewName("home");
+			logoutView.addObject("userDetails",new UserDetailsTable());
+			
+		return logoutView;
 	}
 }
