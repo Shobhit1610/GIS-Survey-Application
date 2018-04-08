@@ -18,4 +18,6 @@ public interface UserDetailsTableCustomService
 	public boolean verify(String userName,String password);
 	
 	public UserDetailsTable getUserObjectByCredentials(String username,String password);
+
+	public int checkDuplicate(UserDetailsTable userDetails);
 }

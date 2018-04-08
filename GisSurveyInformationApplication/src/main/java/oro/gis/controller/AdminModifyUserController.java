@@ -63,12 +63,23 @@ public class AdminModifyUserController
 	{
 		ModelAndView addUserView = new ModelAndView();
 			
-			userDetailsTableService.save(userDetails);
+			int duplicateId = userDetailsTableService.checkDuplicate(userDetails);
+			placeholders = new HashMap<String,Object>();
+
+			if(duplicateId==-1)
+			{
+				userDetailsTableService.save(userDetails);
+				placeholders.put("confirmation","Record Added Successfully");
+			}
+			else
+			{
+				placeholders.put("error","ERROR : Record can't be added");
+				placeholders.put("confirmation"," Duplicate Entry found at ID - "+duplicateId);
+			}
+			
 		
 			long users = userDetailsTableService.count();
 			long tables = tableNameModelService.count();
-			placeholders = new HashMap<String,Object>();
-			placeholders.put("confirmation","Record Added Successfully");
 			placeholders.put("users_count",users);
 			placeholders.put("tables_count", tables);
 			

@@ -16,4 +16,5 @@ public interface TableNameModelCustomService
 	
 	public TableNameModel getObject(int id);
 
+	public int checkDuplicate(TableNameModel tableName);
 }

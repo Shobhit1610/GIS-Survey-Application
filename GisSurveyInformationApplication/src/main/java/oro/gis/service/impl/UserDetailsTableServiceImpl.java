@@ -81,4 +81,16 @@ public class UserDetailsTableServiceImpl implements UserDetailsTableCustomServic
 																		});
 		return requiredObject;
 	}
+	
+	public int checkDuplicate(UserDetailsTable userDetails)
+	{
+		int cnt = this.jdbcTemplate.queryForObject("select count(*) from userdetails where name=? AND username=? AND password=?",new Object[] {userDetails.getName(),userDetails.getUsername(),userDetails.getPassword()},Integer.class);
+		if(cnt>0)
+		{
+			int id = this.jdbcTemplate.queryForObject("select user_id from userdetails where name=? AND username=? AND password=?",new Object[] {userDetails.getName(),userDetails.getUsername(),userDetails.getPassword()},Integer.class);
+			return id;
+		}
+		else
+			return -1;
+	}
 }

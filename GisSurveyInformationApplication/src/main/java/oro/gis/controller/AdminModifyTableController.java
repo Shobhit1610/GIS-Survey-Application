@@ -44,10 +44,10 @@ public class AdminModifyTableController
 		
 			long users = userDetailsTableService.count();
 			long tables = tableNameModelService.count();
-			Map<String,Object> placeholder = new HashMap<String,Object>();
-			placeholder.put("users_count",users);
-			placeholder.put("tables_count", tables);
-			indexView.addAllObjects(placeholder);
+			placeholders = new HashMap<String,Object>();
+			placeholders.put("users_count",users);
+			placeholders.put("tables_count", tables);
+			indexView.addAllObjects(placeholders);
 			indexView.setViewName("adminSide/adminPanel");
 			
 		return indexView;
@@ -68,29 +68,45 @@ public class AdminModifyTableController
 	{
 		ModelAndView addTableView = new ModelAndView();
 		
-			tableNameModelService.save(tableNameModelService.getObject(request.getParameter("tablename.dataTypeName"), request.getParameter("tablename.dataTypeDescription"), request.getParameter("tablename.active")));
-			
-			int id = tableNameModelService.getCurrentDataTypeId();
-			int fieldNumber = Integer.parseInt(request.getParameter("field-no"));
-			for(int i =0;i<fieldNumber;i++)
+			int duplicateId = tableNameModelService.checkDuplicate(tableNameModelService.getObject(request.getParameter("tablename.dataTypeName"), request.getParameter("tablename.dataTypeDescription"), request.getParameter("tablename.active")));
+			placeholders = new HashMap<String,Object>();
+
+			if(duplicateId == -1)
 			{
-				String fieldLabel = request.getParameter("field["+i+"].fieldLabel");
-				String fieldDesc = request.getParameter("field["+i+"].fieldDesc");
-				String fieldType = request.getParameter("field["+i+"].fieldType");
-				String dataType = request.getParameter("field["+i+"].fieldLabel");
-				int dataTypeID = id;
-				String fieldRequired = request.getParameter("field["+i+"].fieldRequired");
-				int sequence = Integer.parseInt(request.getParameter("field["+i+"].sequence"));
+				System.out.println(duplicateId);
+				tableNameModelService.save(tableNameModelService.getObject(request.getParameter("tablename.dataTypeName"), request.getParameter("tablename.dataTypeDescription"), request.getParameter("tablename.active")));
 				
-				tableFieldsModelService.save(tableFieldsModelService.getObject(fieldLabel, fieldDesc, fieldType, dataType, dataTypeID, fieldRequired, sequence));
+				int id = tableNameModelService.getCurrentDataTypeId();
+				int fieldNumber = Integer.parseInt(request.getParameter("field-no"));
+				for(int i =0;i<fieldNumber;i++)
+				{
+					String fieldLabel = request.getParameter("field["+i+"].fieldLabel");
+					String fieldDesc = request.getParameter("field["+i+"].fieldDesc");
+					String fieldType = request.getParameter("field["+i+"].fieldType");
+					String dataType = request.getParameter("field["+i+"].fieldLabel");
+					int dataTypeID = id;
+					String fieldRequired = request.getParameter("field["+i+"].fieldRequired");
+					int sequence = Integer.parseInt(request.getParameter("field["+i+"].sequence"));
+					
+					tableFieldsModelService.save(tableFieldsModelService.getObject(fieldLabel, fieldDesc, fieldType, dataType, dataTypeID, fieldRequired, sequence));
+					
+					placeholders.put("confirmation","Table added successfully");
+					
+				}
+				
+			}
+			else
+			{
+				System.out.println(duplicateId);
+				placeholders.put("error","ERROR : Table can't be added");
+				placeholders.put("confirmation"," Duplicate Entry found at ID - "+duplicateId);
 			}
 			
 			long users = userDetailsTableService.count();
 			long tables = tableNameModelService.count();
-			Map<String,Object> placeholder = new HashMap<String,Object>();
-			placeholder.put("users_count",users);
-			placeholder.put("tables_count", tables);
-			addTableView.addAllObjects(placeholder);
+			placeholders.put("users_count",users);
+			placeholders.put("tables_count", tables);
+			addTableView.addAllObjects(placeholders);
 			addTableView.setViewName("adminSide/adminPanel");
 			
 		return addTableView;

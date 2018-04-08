@@ -33,4 +33,16 @@ public class TableNameModelServiceImpl implements TableNameModelCustomService
 	{
 		return new TableNameModel(id);
 	}
+	
+	public int checkDuplicate(TableNameModel tableName)
+	{
+		int cnt = this.jdbcTemplate.queryForObject("select count(*) from data_name where data_type_name=?",new Object[] {tableName.getDataTypeName()},Integer.class);
+		if(cnt>0)
+		{
+			int id = this.jdbcTemplate.queryForObject("select data_type_id from data_name where data_type_name=?",new Object[] {tableName.getDataTypeName()},Integer.class);
+			return id;
+		}
+		else
+			return -1;
+	}
 }

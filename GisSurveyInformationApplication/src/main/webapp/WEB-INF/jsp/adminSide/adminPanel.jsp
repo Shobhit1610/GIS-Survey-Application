@@ -87,7 +87,8 @@
                		 </div>
                   </div>
                   <div class="footer navbar-fixed-bottom text-center">
-                  			<h3 style="paddingi-right:5px;padding-bottom:5px;">${confirmation}</h3>
+                  			<h2 style="paddingi-right:5px;padding-bottom:2px;">${error}</h2>
+                  			<h3 style="paddingi-right:5px;padding-bottom:px;">${confirmation}</h3>
                   </div>
                </div>
     </div>        
