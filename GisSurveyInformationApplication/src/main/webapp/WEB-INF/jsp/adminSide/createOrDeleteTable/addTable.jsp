@@ -24,7 +24,7 @@
             				Give details of table
             			</div>
        					<form action="${pageContext.request.contextPath}/admin/table/addTable" method="post" >
-               			<input type="hidden" name="field-no" id="field-no" value="0">
+               			<input type="hidden" name="field-no" id="field-no" value="1">
                			<div class="panel-body" id="panel-body" >
 	        				<div class="row">
                  				<div class="col-lg-3">
@@ -62,8 +62,75 @@
             						</div>
             					</div>
              				</div>
-            				
-            			</div>
+            				<div class="row">
+            					<div class="col-lg-12">
+            						<h4 class="page-header">Details of Field 1</h4>
+            					</div>
+            				</div>
+            				<div class="row">
+            					<div class="col-lg-4">
+            						<div class="form-group">
+            							<label for="field[0].fieldLabel">
+            								FIELD LABEL
+            								<input name="field[0].fieldLabel" required class="form-control" placeholder="Name of field" type="text"/>
+            							</label>
+            						</div>
+            					</div>
+            					<div class="col-lg-4">
+            						<div class="form-group">
+            							<label for="field[0].fieldDesc">
+            								DESCRIPTION OF FIELD
+            								<input name="field[0].fieldDesc" required class="form-control" placeholder="Description of field" type="text"/>
+            							</label>
+            						</div>
+            					</div>
+            					<div class="col-lg-4">
+            						<div class="form-group">
+            							<label for="field[0].fieldType">
+            								FIELD TYPE
+            								<select name="field[0].fieldType" required class="form-control">
+            									<option value="String">Text (String)</option>
+            									<option value="Number">Integer (Number)</option>
+            									<option value="Decimal(4,2)">Real (Decimal)</option>
+            								</select>
+            							</label>
+            						</div>
+            					</div>
+            				</div>
+            				<div class="row">
+            					<div class="col-lg-4">
+            						<div class="form-group">
+            							<label for="field[0].fieldRequired">
+            								FIELD REQUIRED
+            								<select name="field[0].fieldRequired" required class="form-control">
+            									<option value="Yes">Yes</option>
+            									<option value="No">No</option>
+            								</select>
+            							</label>
+            						</div>
+            					</div>
+            					<div class="col-lg-4">
+            						<div class="form-group">
+            							<label for="field[0].sequence">
+            								SEQUENCE
+            								<input name="field[0].sequence" readonly value ="0" class="form-control" required/>
+            							</label>
+            						</div>
+            					</div>
+            					<div class="col-lg-4">
+            						<div class="form-group">
+            							<input type="hidden" name="field[0].dataType" value="ACTIVITY"/>
+            						</div>
+            					</div>
+            				</div>
+            				<div class="row">
+            					<div class="col-lg-12">
+            						<h4 class="page-header"></h4>
+            					</div>
+            				</div>
+	
+            				</div>
+            			
             			<div class="panel-footer">
                             	<div class="row">
                                 	<div class="col-lg-6">
@@ -123,9 +190,9 @@
 																				    '            								<label for="field['+a+'].fieldType">\r\n' + 
 																				    '												FIELD TYPE\r\n' + 
 																				    '													<select name="field['+a+'].fieldType" required class="form-control">\r\n' + 
-																				    '														<option value="string">Text</option>\r\n' + 
-																				    '														<option value="number">Integer</option>\r\n' + 
-																				    '														<option value="decimal(4,2)">Real</option>\r\n' + 
+																				    '														<option value="String">Text (String)</option>\r\n' + 
+																				    '														<option value="Number">Integer (Number)</option>\r\n' + 
+																				    '														<option value="Decimal(4,2)">Real (Decimal)</option>\r\n' + 
 																				    '													</select>\r\n' + 
 																				    '											</label>\r\n' + 
 																				    '            							</div>\r\n' + 

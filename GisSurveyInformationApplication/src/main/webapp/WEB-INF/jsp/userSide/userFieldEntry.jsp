@@ -13,7 +13,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header text-center">Entry of Table</h1>
+                    <h1 class="page-header text-center">Entry of Table : ${tabledetails.getDataTypeName() }</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -32,7 +32,7 @@
             					<table class="table table-hover">
             						<thead>
             							<tr>
-											<th>Table ID</th>
+											<th>Table ID : ${tabledetails.getDataTypeID() }</th>
 											<th>FIELD</th>
 											<th>VALUES</th>
 										</tr>

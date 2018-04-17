@@ -34,6 +34,13 @@ public class TableNameModel
 		
 	}
 	
+	public TableNameModel(int id,String dataTypeName, String dataTypeDescription, String active) {
+		this.dataTypeName = dataTypeName;
+		this.dataTypeDescription = dataTypeDescription;
+		this.active = active;
+		this.dataTypeID = id;
+	}
+	
 	public TableNameModel(String dataTypeName, String dataTypeDescription, String active) {
 		this.dataTypeName = dataTypeName;
 		this.dataTypeDescription = dataTypeDescription;

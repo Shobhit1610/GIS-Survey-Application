@@ -97,7 +97,8 @@ public class UserController {
 			else
 			{
 				int datatype_id = Integer.parseInt(tableid);
-				request.setAttribute("fielddetails",tableFieldModelService.getTablesList(datatype_id));
+				request.setAttribute("fielddetails",tableFieldModelService.getFieldsList(datatype_id));
+				request.setAttribute("tabledetails",tableNameModelService.getDetails(datatype_id));
 				addEntryView.setViewName("userSide/userFieldEntry");
 			}
 			
@@ -114,12 +115,14 @@ public class UserController {
 			
 			int userid = userDetails.getUserid();
 			entryMakerModelService.save(new EntryMakerModel(userid));
+			int entryId = entryMakerModelService.getEntryId();
 		
 			Map<String, String[]> fieldVauesMap = request.getParameterMap();
-			EntryValuesModel entryValues = new EntryValuesModel();
 			for(String x : fieldVauesMap.keySet())
 			{
-				entryValues.setEntryID(userDetails.getUserid());
+				System.out.println(x);
+				EntryValuesModel entryValues = new EntryValuesModel();
+				entryValues.setEntryID(entryId);
 				entryValues.setFieldID(Integer.parseInt(x));
 				entryValues.setFieldValue(fieldVauesMap.get(x)[0]);
 				entryValuesModelService.save(entryValues);
@@ -128,6 +131,7 @@ public class UserController {
 			saveEntryView.addObject("confirmation","Data added Succesfully");
 			saveEntryView.addObject("details", tableNameModelService.getTablesList());		
 			saveEntryView.setViewName("userSide/userPanel");
+			
 		return saveEntryView;
 	}
 	

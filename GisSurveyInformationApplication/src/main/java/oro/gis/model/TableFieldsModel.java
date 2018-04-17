@@ -45,9 +45,8 @@ public class TableFieldsModel
 		
 	}
 	
-	
 	public TableFieldsModel(String fieldLabel, String fieldDesc, String fieldType, String dataType, int dataTypeID,
-			String fieldRequired, int sequence) {
+			String fieldRequired, int sequence  ) {
 		super();
 		this.fieldLabel = fieldLabel;
 		this.fieldDesc = fieldDesc;
@@ -56,6 +55,18 @@ public class TableFieldsModel
 		this.dataTypeID = dataTypeID;
 		this.fieldRequired = fieldRequired;
 		this.sequence = sequence;
+	}
+	public TableFieldsModel(String fieldLabel, String fieldDesc, String fieldType, String dataType, int dataTypeID,
+			String fieldRequired, int sequence , int fieldId) {
+		super();
+		this.fieldLabel = fieldLabel;
+		this.fieldDesc = fieldDesc;
+		this.fieldType = fieldType;
+		this.dataType = dataType;
+		this.dataTypeID = dataTypeID;
+		this.fieldRequired = fieldRequired;
+		this.sequence = sequence;
+		this.fieldID = fieldId;
 	}
 
 
