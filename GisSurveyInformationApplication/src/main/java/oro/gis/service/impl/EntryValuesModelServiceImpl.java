@@ -25,6 +25,7 @@ public class EntryValuesModelServiceImpl implements EntryValuesModelCustomServic
 	for(Map<String,Object> row : listOfFields)
 	{
 		tableRow = new EntryValuesModel();
+		tableRow.setSno((int)row.get("s_no"));
 		tableRow.setEntryID((int)row.get("entry_id"));
 		tableRow.setFieldID((int)row.get("field_id"));
 		tableRow.setFieldValue((String)row.get("field_value"));

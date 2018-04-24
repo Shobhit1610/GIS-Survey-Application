@@ -33,19 +33,24 @@
             				<div class="table-responsive">
             					<table class="table table-hover">
             						<thead>
-            							<tr>
+            							<tr >
+            								<th>S.No (Click to edit)</th>
             								<stl:forEach var="field" items="${tableFieldsList}">
             									<th>${field.getFieldLabel()}</th>
             								</stl:forEach>
 										</tr>
             						</thead>
             						<tbody>
+            						
             							<%
 										List<List<EntryValuesModel>> modalMap = (List<List<EntryValuesModel>>)request.getAttribute("modalMap");
 										for(int i=0;i<modalMap.get(0).size();i++)
 										{
 											%>
 											<tr>
+												<td>
+													<a href="${pageContext.request.contextPath}/admin/table/editTableData?tableid=${tableName.getDataTypeID()}&row=<%out.println(i);%>"><%out.println(i+1); %></a>	
+												</td>
 												<%
 													for(int j=0;j<modalMap.size();j++)
 													{

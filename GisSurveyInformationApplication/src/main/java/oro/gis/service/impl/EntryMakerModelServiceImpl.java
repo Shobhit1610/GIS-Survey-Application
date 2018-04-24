@@ -3,7 +3,6 @@ package oro.gis.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import oro.gis.service.EntryMakerModelService;
 import oro.gis.service.custom.EntryMakerModelCustomService;
 
 public class EntryMakerModelServiceImpl implements EntryMakerModelCustomService 

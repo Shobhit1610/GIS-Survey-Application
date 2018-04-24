@@ -46,7 +46,7 @@
 												<td>${table.data_type_name}</td>
 												<td>${table.data_type_description}</td>
 												<td>${table.active}</td>
-											<tr>
+											</tr>
 										</stl:forEach>
             						</tbody>
             					</table>

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -185,8 +186,8 @@ public class AdminModifyTableController
 			}
 			else
 			{
-				placeholders.put("error","ERROR : Table can't be edited");
-				placeholders.put("confirmation"," Duplicate Entry found at ID - "+duplicateId);
+				placeholders.put("error","Duplicate Entry");
+				//placeholders.put("confirmation"," Duplicate Entry found at ID - "+duplicateId);
 			}
 				
 			long users = userDetailsTableService.count();
@@ -253,7 +254,6 @@ public class AdminModifyTableController
 			List<List<EntryValuesModel>> modalMap = new ArrayList<List<EntryValuesModel>>();
 			for(TableFieldsModel x : tableFieldsList)
 			{
-				System.out.println(x.getFieldID()+" "+x.getFieldLabel());
 				List<EntryValuesModel> row = entryValuesModelService.getFieldDataRows(x.getFieldID());
 				modalMap.add(row);
 				
@@ -267,4 +267,75 @@ public class AdminModifyTableController
 			
 		return showDataView;
 	}
+	
+	@RequestMapping(value="/editTableData",method=RequestMethod.GET)
+	public ModelAndView editTableData(@RequestParam("tableid") String tableId, @RequestParam("row") String row,HttpServletRequest request)
+	{
+		ModelAndView editTableDataView = new ModelAndView();
+			
+			int tableID = Integer.parseInt(tableId);
+			int rowNumber = Integer.parseInt(row);
+			
+			HttpSession session = request.getSession();
+			session.setAttribute("tableID",tableID);
+			session.setAttribute("rowNumber",rowNumber);
+		
+			TableNameModel tableName = tableNameModelService.getDetails(tableID);
+			List<TableFieldsModel> tableFieldsList = tableFieldsModelService.getFieldsList(tableID);
+			
+			placeholders = new HashMap<String,Object>();
+			placeholders.put("tabledetails",tableName);
+			placeholders.put("fielddetails",tableFieldsList);
+			editTableDataView.addAllObjects(placeholders);
+			
+			editTableDataView.setViewName("adminSide/createOrDeleteTable/editTableData");
+		
+		return editTableDataView;
+	}
+	
+	@RequestMapping(value="/editTableData",method=RequestMethod.POST)
+	public ModelAndView editTableData(HttpServletRequest request)
+	{
+		ModelAndView editTableDataView = new ModelAndView();
+
+			HttpSession session = request.getSession();
+			int tableID = (Integer)session.getAttribute("tableID");
+			int rowNumber = (Integer)session.getAttribute("rowNumber");
+			
+			List<TableFieldsModel> tableFieldsList = tableFieldsModelService.getFieldsList(tableID);
+			
+			Map<String,String[]> map = request.getParameterMap();
+		
+			List<List<EntryValuesModel>> modalMap = new ArrayList<List<EntryValuesModel>>();
+			for(TableFieldsModel x : tableFieldsList)
+			{
+				List<EntryValuesModel> rowItems = entryValuesModelService.getFieldDataRows(x.getFieldID());
+				modalMap.add(rowItems);
+				
+			}
+			
+			for(int i=0;i<modalMap.size();i++)
+				
+			{
+				EntryValuesModel field = new EntryValuesModel();
+				field.setSno(modalMap.get(i).get(rowNumber).getSno());
+				field.setEntryID(modalMap.get(i).get(rowNumber).getEntryID());
+				field.setFieldID(modalMap.get(i).get(rowNumber).getFieldID());
+				String values[] = map.get(Integer.toString(field.getFieldID()));
+				field.setFieldValue(values[0]);
+				entryValuesModelService.save(field);
+			}
+
+			long users = userDetailsTableService.count();
+			long tables = tableNameModelService.count();
+			placeholders = new HashMap<String,Object>();
+			placeholders.put("users_count",users);
+			placeholders.put("tables_count", tables);
+			placeholders.put("confirmation", "User Entry edited Successfully");
+			editTableDataView.addAllObjects(placeholders);
+			editTableDataView.setViewName("adminSide/adminPanel");
+		
+		return editTableDataView;
+	}
+	
 }

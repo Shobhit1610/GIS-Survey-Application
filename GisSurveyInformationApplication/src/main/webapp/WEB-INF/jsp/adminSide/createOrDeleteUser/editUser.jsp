@@ -31,19 +31,19 @@
             									<tr>
             										<input type="hidden" name="userid" value="${olddetails.getUserid()}"/>
             										<th>User ID : ${olddetails.getUserid()}</th>
-													<th>OLD Details</th>
 													<th>NEW Details</th>
 												</tr>
         		    						</thead>
             								<tbody>
 	            								<tr>
 													<td>NAME</td>
-													<td>
+													<%-- <td>
 														<div class="form-group">
 															<input value="${olddetails.getName()}" readonly="true" class="form-control"/>
 														</div>
 													</td>
-													<td>
+													 --%>
+													 <td>
 														<div class="form-group">
             												<form:input path="name" required="required" cssClass="form-control"  type="text"/>
 														</div>
@@ -51,12 +51,13 @@
 												<tr>
 												<tr>
 													<td>USERNAME</td>
-													<td>
+													<%-- <td>
 														<div class="form-group">
 															<input value="${olddetails.getUsername()}" readonly="true" class="form-control"/>
 														</div>		
 													</td>
-													<td>
+													 --%>
+													 <td>
 														<div class="form-group">
             												<form:input path="username" required="required" cssClass="form-control"  type="text"/>
 														</div>
@@ -64,12 +65,13 @@
 												<tr>
 												<tr>
 													<td>PASSWORD</td>
-													<td>
+													<%-- <td>
 														<div class="form-group">
 															<input value="${olddetails.getPassword()}" readonly="true" class="form-control"/>
 														</div>
 													</td>
-													<td>
+													 --%>
+													 <td>
 														<div class="form-group">
             												<form:input path="password" required="required" cssClass="form-control"  type="text"/>
 														</div>

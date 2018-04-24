@@ -34,6 +34,16 @@ public class EntryValuesModel
 		this.fieldID=-1;
 		this.fieldValue=null;
 	}*/
+	public void setSno(int sno)
+	{
+		this.sno = sno;
+	}
+	
+	public int getSno()
+	{
+		return this.sno;
+	}
+	
 	public int getEntryID() {
 		return entryID;
 	}

@@ -31,19 +31,21 @@
             									<tr>
             										<input type="hidden" name="tablename.dataTypeId" value="${oldtablenamedetails.getDataTypeID()}"/>
             										<th>Table ID : ${oldtablenamedetails.getDataTypeID()}</th>
-													<th>OLD Details</th>
-													<th>NEW Details</th>
+													<!-- <th>OLD Details</th>
+													 -->
+													 <th>NEW Details</th>
 												</tr>
         		    						</thead>
             								<tbody>
 	            								<tr>
 													<td>NAME</td>
-													<td>
+													<%-- <td>
 														<div class="form-group">
 															<input value="${oldtablenamedetails.getDataTypeName()}" readonly class="form-control"/>
 														</div>
 													</td>
-													<td>
+													 --%>
+													 <td>
 														<div class="form-group">
             												<input name="tablename.dataTypeName" required class="form-control"  type="text"/>
 														</div>
@@ -51,12 +53,13 @@
 												<tr>
 												<tr>
 													<td>DESCRIPTON</td>
-													<td>
+													<%-- <td>
 														<div class="form-group">
 															<input value="${oldtablenamedetails.getDataTypeDescription()}" readonly class="form-control"/>
 														</div>		
 													</td>
-													<td>
+													 --%>
+													 <td>
 														<div class="form-group">
             												<input name="tablename.dataTypeDescription" required="required" class="form-control"  type="text"/>
 														</div>
@@ -64,12 +67,13 @@
 												<tr>
 												<tr>
 													<td>ACTIVE</td>
-													<td>
+													<%-- <td>
 														<div class="form-group">
 															<input value="${oldtablenamedetails.getActive()}" readonly="true" class="form-control"/>
 														</div>
 													</td>
-													<td>
+													 --%>
+													 <td>
 														<div class="form-group">
             												<select name="tablename.active" required class="form-control" >
             													<option value="Yes">Yes</option>
@@ -91,19 +95,21 @@
             							<table class="table table-hover">
             								<thead>
             									<th>Field : ${i.count} </th>
-												<th>OLD Details</th>
-												<th>NEW Details</th>
+												<!-- <th>OLD Details</th>
+												 -->
+												 <th>NEW Details</th>
             								</thead>
             								<tbody>
             										<tr></tr>
             										<tr>
             											<td>LABEL</td>
-            											<td>
+            											<%-- <td>
 															<div class="form-group">
 																<input value="${field.getFieldLabel()}" readonly class="form-control"/>
 															</div>
 														</td>
-														<td>
+														 --%>
+														 <td>
 															<div class="form-group">
             													<input name ="field[${i.count}].fieldLabel" required class="form-control"  type="text"/>
 															</div>
@@ -111,12 +117,13 @@
             										</tr>
             										<tr>
             											<td>DESCRIPTION</td>
-            											<td>
+            											<%-- <td>
 															<div class="form-group">
 																<input value="${field.getFieldDesc()}" readonly class="form-control"/>
 															</div>
 														</td>
-														<td>
+														 --%>
+														 <td>
 															<div class="form-group">
             													<input name ="field[${i.count}].fieldDesc" required class="form-control"  type="text"/>
 															</div>
@@ -124,12 +131,13 @@
             										</tr>
             										<tr>
             											<td>TYPE</td>
-            											<td>
+            											<%-- <td>
 															<div class="form-group">
 																<input value="${field.getFieldType()}" readonly class="form-control"/>
 															</div>
 														</td>
-														<td>
+														 --%>
+														 <td>
 															<div class="form-group">
 																<select name="field[${i.count}].fieldType" required class="form-control">
 																	<option value="String">Text (String)</option>
@@ -141,12 +149,13 @@
             										</tr>
             										<tr>
             											<td>REQUIRED</td>
-            											<td>
+            											<%-- <td>
 															<div class="form-group">
 																<input value="${field.getFieldRequired()}" readonly class="form-control"/>
 															</div>
 														</td>
-														<td>
+														 --%>
+														 <td>
 															<div class="form-group">
 																<select name="field[${i.count}].fieldRequired" required class="form-control">
 																	<option value="Yes">Yes</option>
@@ -161,7 +170,6 @@
             							<input type="hidden" name="field[${i.count}].dataType" value="ACTIVITY"/>
             							<input type="hidden" name="field[${i.count}].dataTypeId" value="${oldtablenamedetails.getDataTypeID()}"/>
             							<input type="hidden" name="field[${i.count}].sequence" value="${field.getSequence()}"/>
-            							<h1>${field.getSequence()}</h1>
             							</stl:forEach>
             						</div>
             					</div>
