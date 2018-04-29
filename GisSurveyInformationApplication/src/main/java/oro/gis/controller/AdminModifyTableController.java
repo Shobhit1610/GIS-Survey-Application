@@ -158,12 +158,12 @@ public class AdminModifyTableController
 			int dataTypeId = Integer.parseInt(request.getParameter("tablename.dataTypeId")); 
 			TableNameModel editedTable = new TableNameModel(dataTypeId,request.getParameter("tablename.dataTypeName"), request.getParameter("tablename.dataTypeDescription"), request.getParameter("tablename.active"));
 			placeholders = new HashMap<String,Object>();
-			
+			/*
 			int duplicateId = tableNameModelService.checkDuplicate(editedTable);
 			
 			if(duplicateId == -1)
 			{
-				tableNameModelService.save(editedTable);
+			*/	tableNameModelService.save(editedTable);
 				
 				int fieldCount = tableFieldsModelService.getFieldCount(dataTypeId);
 				for(int i =1;i<=fieldCount;i++)
@@ -179,17 +179,34 @@ public class AdminModifyTableController
 					System.out.println(i+" "+fieldLabel+" "+fieldDesc+" "+fieldType+" "+dataType+" "+dataTypeId+" "+fieldRequired+" "+sequence+" "+fieldId);
 					tableFieldsModelService.save(new TableFieldsModel(fieldLabel, fieldDesc,  fieldType,  dataType,  dataTypeId, fieldRequired,  sequence, fieldId));
 					
-					placeholders.put("confirmation","Table edited successfully");
 					
 				}
+				
+				int extraFieldCount = Integer.parseInt(request.getParameter("field-no"));
+				for(int i =0;i<extraFieldCount;i++)
+				{
+					String fieldLabel = request.getParameter("fieldextra["+i+"].fieldLabel");
+					String fieldDesc = request.getParameter("fieldextra["+i+"].fieldDesc");
+					String fieldType = request.getParameter("fieldextra["+i+"].fieldType");
+					String dataType = "ACTIVITY";
+					String fieldRequired = request.getParameter("fieldextra["+i+"].fieldRequired");
+					int sequence =i+fieldCount;
+					
+					System.out.println(i+" "+fieldLabel+" "+fieldDesc+" "+fieldType+" "+dataType+" "+dataTypeId+" "+fieldRequired+" "+sequence);
+					tableFieldsModelService.save(new TableFieldsModel(fieldLabel, fieldDesc,  fieldType,  dataType,  dataTypeId, fieldRequired,  sequence));
+					System.out.println("Extra Field added");
+					
+				}
+				placeholders.put("confirmation","Table edited successfully");
+				
+			/*}
 			
-			}
 			else
 			{
 				placeholders.put("error","Duplicate Entry");
 				//placeholders.put("confirmation"," Duplicate Entry found at ID - "+duplicateId);
 			}
-				
+			*/	
 			long users = userDetailsTableService.count();
 			long tables = tableNameModelService.count();
 			placeholders.put("users_count",users);
@@ -254,7 +271,7 @@ public class AdminModifyTableController
 			List<List<EntryValuesModel>> modalMap = new ArrayList<List<EntryValuesModel>>();
 			for(TableFieldsModel x : tableFieldsList)
 			{
-				List<EntryValuesModel> row = entryValuesModelService.getFieldDataRows(x.getFieldID());
+				List<EntryValuesModel> row = entryValuesModelService.getFieldDataRows(x.getFieldID(),tableID);
 				modalMap.add(row);
 				
 			}
@@ -283,7 +300,17 @@ public class AdminModifyTableController
 			TableNameModel tableName = tableNameModelService.getDetails(tableID);
 			List<TableFieldsModel> tableFieldsList = tableFieldsModelService.getFieldsList(tableID);
 			
+			List<List<EntryValuesModel>> modalMap = new ArrayList<List<EntryValuesModel>>();
+			for(TableFieldsModel x : tableFieldsList)
+			{
+				List<EntryValuesModel> rowItems = entryValuesModelService.getFieldDataRows(x.getFieldID(),tableID);
+				modalMap.add(rowItems);
+				
+			}
+			
 			placeholders = new HashMap<String,Object>();
+			placeholders.put("rownumber",rowNumber);
+			placeholders.put("modalmap",modalMap);
 			placeholders.put("tabledetails",tableName);
 			placeholders.put("fielddetails",tableFieldsList);
 			editTableDataView.addAllObjects(placeholders);
@@ -303,29 +330,41 @@ public class AdminModifyTableController
 			int rowNumber = (Integer)session.getAttribute("rowNumber");
 			
 			List<TableFieldsModel> tableFieldsList = tableFieldsModelService.getFieldsList(tableID);
-			
-			Map<String,String[]> map = request.getParameterMap();
-		
+			Map<String,String[]> requestMap = request.getParameterMap();
 			List<List<EntryValuesModel>> modalMap = new ArrayList<List<EntryValuesModel>>();
+			
 			for(TableFieldsModel x : tableFieldsList)
 			{
-				List<EntryValuesModel> rowItems = entryValuesModelService.getFieldDataRows(x.getFieldID());
+				List<EntryValuesModel> rowItems = entryValuesModelService.getFieldDataRows(x.getFieldID(),tableID);
 				modalMap.add(rowItems);
 				
 			}
 			
 			for(int i=0;i<modalMap.size();i++)
 				
-			{
+			{	try
+				{
 				EntryValuesModel field = new EntryValuesModel();
-				field.setSno(modalMap.get(i).get(rowNumber).getSno());
 				field.setEntryID(modalMap.get(i).get(rowNumber).getEntryID());
 				field.setFieldID(modalMap.get(i).get(rowNumber).getFieldID());
-				String values[] = map.get(Integer.toString(field.getFieldID()));
+				
+				String values[] = requestMap.get(Integer.toString(field.getFieldID()));
+				for(String a : values) {
+					System.out.println(a);
+				}
 				field.setFieldValue(values[0]);
+				entryValuesModelService.deletePrevious(field);
 				entryValuesModelService.save(field);
+				}
+				
+				catch(Exception e)
+				{
+					break;
+				}
 			}
 
+			
+			
 			long users = userDetailsTableService.count();
 			long tables = tableNameModelService.count();
 			placeholders = new HashMap<String,Object>();

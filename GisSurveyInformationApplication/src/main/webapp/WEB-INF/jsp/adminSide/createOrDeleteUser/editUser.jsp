@@ -45,7 +45,7 @@
 													 --%>
 													 <td>
 														<div class="form-group">
-            												<form:input path="name" required="required" cssClass="form-control"  type="text"/>
+            												<form:input path="name" required="required" cssClass="form-control"  type="text" value="${olddetails.getName() }"/>
 														</div>
 													</td>
 												<tr>
@@ -59,7 +59,7 @@
 													 --%>
 													 <td>
 														<div class="form-group">
-            												<form:input path="username" required="required" cssClass="form-control"  type="text"/>
+            												<form:input path="username" required="required" cssClass="form-control"  type="text" value="${olddetails.getUsername() }"/>
 														</div>
 													</td>
 												<tr>
@@ -73,7 +73,7 @@
 													 --%>
 													 <td>
 														<div class="form-group">
-            												<form:input path="password" required="required" cssClass="form-control"  type="text"/>
+            												<form:input path="password" required="required" cssClass="form-control"  type="text" value="${olddetails.getPassword() }"/>
 														</div>
 													</td>
 												<tr>

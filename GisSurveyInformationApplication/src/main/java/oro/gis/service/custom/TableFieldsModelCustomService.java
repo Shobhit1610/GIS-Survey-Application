@@ -12,7 +12,7 @@ public interface TableFieldsModelCustomService
 	
 	public TableFieldsModel getObject(int id);
 	
-	public List getFieldsList(int dataTypeID);
+	public List<TableFieldsModel> getFieldsList(int dataTypeID);
 	
 	public TableFieldsModel getObject();
 

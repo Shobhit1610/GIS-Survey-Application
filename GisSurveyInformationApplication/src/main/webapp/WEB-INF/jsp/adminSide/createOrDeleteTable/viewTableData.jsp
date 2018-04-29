@@ -1,6 +1,7 @@
 <%@include file="/WEB-INF/html/head/directives.html" %>
 <%@page import ="java.util.List" %>
 <%@page import ="java.util.ArrayList" %>
+<%@page import ="java.util.Map" %>
 <%@page import ="oro.gis.model.EntryValuesModel" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -57,7 +58,14 @@
 														%>
 															<td>
 																<%
-																	out.println(modalMap.get(j).get(i).getFieldValue());
+																	try
+																{
+																		out.println(modalMap.get(j).get(i).getFieldValue());
+																}
+																catch(Exception e)
+																{
+																	out.println("##");
+																}
 																%>
 															</td>
 														<%										

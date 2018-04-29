@@ -7,5 +7,7 @@ import oro.gis.model.EntryValuesModel;
 public interface EntryValuesModelCustomService
 {
 
-	public List<EntryValuesModel> getFieldDataRows(int field);
+	public List<EntryValuesModel> getFieldDataRows(int field,int dataTypeId);
+	
+	public void deletePrevious(EntryValuesModel model);
 }
