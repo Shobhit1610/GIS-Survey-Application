@@ -73,8 +73,8 @@ public class AdminModifyUserController
 			}
 			else
 			{
-				placeholders.put("error","ERROR : Record can't be added");
-				placeholders.put("confirmation"," Duplicate Entry found at ID - "+duplicateId);
+				placeholders.put("error"," Duplicate Entry");
+				//placeholders.put("confirmation"," Duplicate Entry found at ID - "+duplicateId);
 			}
 			
 		
@@ -126,15 +126,25 @@ public class AdminModifyUserController
 		ModelAndView editUserView = new ModelAndView();
 		
 			int id = Integer.parseInt(userId);
-			userDetailsTableService.update(newUserDetails,id);
+			int duplicateId = userDetailsTableService.checkDuplicate(newUserDetails);
+			placeholders = new HashMap<String,Object>();
+			
+			if(duplicateId==-1)
+			{
+				userDetailsTableService.update(newUserDetails,id);
+				
+				placeholders.put("confirmation", "Record edited Successfully");
+			}
+			else
+			{
+				placeholders.put("error","Duplicate Entry");
+			}
 			
 			long users = userDetailsTableService.count();
 			long tables = tableNameModelService.count();
-			placeholders = new HashMap<String,Object>();
 			placeholders.put("users_count",users);
 			placeholders.put("tables_count", tables);
-			placeholders.put("confirmation", "Record edited Successfully");
-		
+			
 			editUserView.addAllObjects(placeholders);
 			editUserView.setViewName("adminSide/adminPanel");
 		

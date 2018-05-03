@@ -103,8 +103,8 @@ public class AdminModifyTableController
 			}
 			else
 			{
-				placeholders.put("error","ERROR : Table can't be added");
-				placeholders.put("confirmation"," Duplicate Entry found at ID - "+duplicateId);
+				placeholders.put("error","Duplicate Entry");
+				//placeholders.put("confirmation"," Duplicate Entry");
 			}
 			
 			long users = userDetailsTableService.count();
@@ -158,12 +158,12 @@ public class AdminModifyTableController
 			int dataTypeId = Integer.parseInt(request.getParameter("tablename.dataTypeId")); 
 			TableNameModel editedTable = new TableNameModel(dataTypeId,request.getParameter("tablename.dataTypeName"), request.getParameter("tablename.dataTypeDescription"), request.getParameter("tablename.active"));
 			placeholders = new HashMap<String,Object>();
-			/*
+			
 			int duplicateId = tableNameModelService.checkDuplicate(editedTable);
 			
 			if(duplicateId == -1)
 			{
-			*/	tableNameModelService.save(editedTable);
+				tableNameModelService.save(editedTable);
 				
 				int fieldCount = tableFieldsModelService.getFieldCount(dataTypeId);
 				for(int i =1;i<=fieldCount;i++)
@@ -198,15 +198,15 @@ public class AdminModifyTableController
 					
 				}
 				placeholders.put("confirmation","Table edited successfully");
-				
-			/*}
+			}	
+			
 			
 			else
 			{
 				placeholders.put("error","Duplicate Entry");
 				//placeholders.put("confirmation"," Duplicate Entry found at ID - "+duplicateId);
 			}
-			*/	
+				
 			long users = userDetailsTableService.count();
 			long tables = tableNameModelService.count();
 			placeholders.put("users_count",users);
@@ -345,6 +345,7 @@ public class AdminModifyTableController
 			{	try
 				{
 				EntryValuesModel field = new EntryValuesModel();
+				field.setSno(modalMap.get(i).get(rowNumber).getSno());
 				field.setEntryID(modalMap.get(i).get(rowNumber).getEntryID());
 				field.setFieldID(modalMap.get(i).get(rowNumber).getFieldID());
 				
